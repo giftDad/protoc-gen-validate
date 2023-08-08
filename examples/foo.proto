@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package foo.v1;
+
+service Demo {
+    rpc Numerics(NumericsReq) returns (Empty);
+    rpc Strings(StringsReq) returns (Empty);
+    rpc Repeated(RepeatedReq) returns (Empty);
+}
+
+message Empty {}
+
+message RepeatedReq {
+    // @min_items:1
+    // @max_items:2
+    repeated int32 a = 1;
+    // @unique:true
+    repeated int64 b = 2;
+    // @unique:true
+    repeated string c = 3;
+    repeated NumericsReq d = 4;
+    // @eq:1.23
+    repeated float e = 5;
+}
+
+message NumericsReq {
+    // @eq:1.23
+    float a = 1;
+    // @lt:20
+    // @gt:10
+    int32 b = 2;
+    // @lte:20
+    // @gte:10
+    uint64 c = 3;
+    // @in:[1,2,3]
+    fixed32 d = 4;
+    // @not_in:[1,2,3]
+    float e = 5;
+    // @range:(1,5)
+    float f = 6;
+    // @range:[1,5]
+    float g = 7;
+}
+
+message StringsReq {
+    // @contains:"bar"
+    string a = 1;
+    // @not_contains:"bar"
+    string b = 2;
+    // @eq:"bar"
+    string c = 3;
+    // @in:["foo", "bar", "baz"]
+    string d = 4;
+    // @not_in:["foo", "bar", "baz"]
+    string e = 5;
+    // @len:5
+    string f = 6;
+    // @min_len:5
+    // @max_len:10
+    string g = 7;
+    // @pattern:"(?i)^[0-9a-f]+$"
+    string h = 8;
+    // @prefix:"foo"
+    string i = 9;
+    // @suffix:"bar"
+    string j = 10;
+    // @type:url
+    string k = 11;
+    // @type:phone
+    string l = 12;
+    // @type:email
+    string m = 13;
+    // @type:ip
+    string n = 14;
+}
