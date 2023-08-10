@@ -1,13 +1,10 @@
-
 - [English](README.md)
 - [简体中文](README-zh.md)
 
 # protoc-gen-validate
+基于proto文件的注解，为每个message生成validate函数。
 
-based on proto files' annotation, generating a validate function for each message.
-
-[Article](https://yflee.in/protoc-gen-validate.html) describes the past and present of protoc-gen-validate, and I welcome everyone to add my WeChat `lyf987667482` to discuss together.
-
+[文章](https://yflee.in/protoc-gen-validate.html)描述了protoc-gen-validate的前世今生，也欢迎大家加我的微信`lyf987667482`一起讨论。
 ```protobuf
 syntax = "proto3";
 
@@ -86,7 +83,8 @@ message StringsReq {
 }
 ```
 
-Created validation method for Numerics:
+生成的`Numerics`的校验方法如下：
+
 ```go
 func (m *NumericsReq) validate() error {
   if m == nil {
@@ -160,27 +158,27 @@ func (m *NumericsReq) validate() error {
 }
 ```
 
-# Installation
+# 安装
 ```bash
 go install github.com/giftDad/protoc-gen-validate
 ```
 
-# Example
+# 例子
 ```bash
 protoc  examples/foo.proto  --validate_out=Mexamples/foo.proto=examples/\;examples:. \
 --go_out=Mexamples/foo.proto=examples/\;examples:.
 go test -v ./examples/
 ```
 
-# Application
-Suitable for RPC frameworks based on protobuf, such as [gi-micro](https://github.com/go-micro/generator),[twirp](https://github.com/twitchtv/twirp) and more. There are two ways to use it, using gi-micro as an example:
+# 应用
+适用于基于protobuf的rpc框架 比如[gi-micro](https://github.com/go-micro/generator),[twirp](https://github.com/twitchtv/twirp)等等。
+使用方式有两种,我们拿gi-micro举例：
 
-1. The first approach is to modify the protoc-gen-xxx tool, such as gi-micro's [generator](https://github.com/go-micro/generator)
-Add the following lines at `cmd/protoc-gen-micro/plugin/micro/micro.go:480`:
-
+1. 第一种是修改其 protoc-gen-xxx工具，比如gi-micro的[generator](https://github.com/go-micro/generator)
+在`cmd/protoc-gen-micro/plugin/micro/micro.go:480`处增加:
 ```go
 g.P("func (h *", unexport(servName), "Handler) ", methName, "(ctx ", contextPkg, ".Context, in *", inType, ", out *",outType, ") error {")
-// Add the following three lines
+// 增加以下三行
 g.P("if err := in.validate();err != nil {")
 g.P("return err")
 g.P("}")
@@ -189,7 +187,7 @@ g.P("return h.", serveType, ".", methName, "(ctx, in, out)")
 g.P("}")
 g.P()
 ```
-This will transform the generated method into:
+就能使其生成的方法变为:
 ```go
 func (h *greeterHandler) Hello(ctx context.Context, in *Request, out *Response) error {
     if err := in.validate();err != nil {
@@ -198,9 +196,9 @@ func (h *greeterHandler) Hello(ctx context.Context, in *Request, out *Response) 
     return h.GreeterHandler.Hello(ctx, in, out)
 }
 ```
-Additionally, add `--validate_out=.` to your `protoc` command to apply `protoc-gen-validate`.
+同时在`protoc`中增加`--validate_out=.`,就能正确应用`protoc-gen-validate`
 
-2. The second approach is to manually call `validate()` in the server layer:
+2. 第二种是在server层手动执行`validate()`:
 ```go
 func (g *Greeter) Hello(ctx context.Context, req *pb.Request, rsp *pb.Response) error {
     if err := req.validate(); err != nil {
@@ -211,20 +209,21 @@ func (g *Greeter) Hello(ctx context.Context, req *pb.Request, rsp *pb.Response) 
 }
 ```
 
-The advantage of the first approach is that it embeds validation in the program without requiring any business operations, but it introduces a certain level of intrusiveness. The second approach is more like a manual mode, where you call validation when needed.
+第一种方式的优势在于无需任何业务操作，就能将validate嵌入程序中，但是会带有一定的侵入性。
+而第二种则就像手动挡，在需要的时候手动调用。
 
-# Supported Rules
+# 支持规则
 
-## Numeric Types
+## 数字类型
 (float, double, int32, int64, uint32, uint64 , sint32, sint64, fixed32, fixed64, sfixed32, sfixed64)
 
-### Equality
+### 相等
 ```protobuf
 // @eq:1.23
 float a = 1;
 ```
 
-### Greater than, less than, equal to
+### 大于小于等于
 ```protobuf
 // @lt:20
 // @gt:10
@@ -234,7 +233,7 @@ int32 b = 2;
 uint64 c = 3;
 ```
 
-### Inclusion in an array
+### 是否在数组中
 ```protobuf
 // @in:[1,2,3]
 fixed32 d = 4;
@@ -242,7 +241,7 @@ fixed32 d = 4;
 float e = 5;
 ```
 
-### Open and closed intervals
+### 开闭区间
 ```protobuf
 // @range:(1,5)
 float f = 6;
@@ -250,15 +249,15 @@ float f = 6;
 float g = 7;
 ```
 
-## String Types
+## 字符串类型
 
-### Equality
+### 相等
 ```protobuf
 // @eq:"bar"
 string c = 3;
 ```
 
-### Substring containment
+### 是否包含字串
 ```protobuf
 // @contains:"bar"
 string a = 1;
@@ -266,7 +265,7 @@ string a = 1;
 string b = 2;
 ```
 
-### Inclusion in an array
+### 是否在数组中
 ```protobuf
 // @in:["foo", "bar", "baz"]
 string d = 4;
@@ -274,26 +273,26 @@ string d = 4;
 string e = 5;
 ```
 
-### String length
+### 字符串长度
 ```protobuf
 // @len:5
 string f = 6;
 ```
 
-### String length range
+### 字符串长度区间
 ```protobuf
 // @min_len:5
 // @max_len:10
 string g = 7;
 ```
 
-### Regular expression pattern
+### 正则
 ```protobuf
 // @pattern:"(?i)^[0-9a-f]+$"
 string h = 8;
 ```
 
-### Prefix and suffix
+### 前缀后缀
 ```protobuf
 // @prefix:"foo"
 string i = 9;
@@ -301,7 +300,7 @@ string i = 9;
 string j = 10;
 ```
 
-### Common types
+### 常见类型
 ```protobuf
 // @type:url
 string k = 11;
@@ -314,23 +313,23 @@ string n = 14;
 ```
 
 
-## Array Types
+## 数组类型
 
-### Supports all single-item rules
+### 支持所有单项规则
 ```protobuf
 // @gt:10
 // @lt:10
 repeated float e = 5;
 ```
 
-### Supports array length control
+### 支持数组长度控制
 ```protobuf
 // @min_items:1
 // @max_items:2
 repeated int32 a = 1;
 ```
 
-### Supports array uniqueness check
+### 支持数组判重
 ```protobuf
 // @unique:true
 repeated int64 b = 2;
