@@ -86,7 +86,7 @@ message StringsReq {
 生成的`Numerics`的校验方法如下：
 
 ```go
-func (m *NumericsReq) validate() error {
+func (m *NumericsReq) Validate() error {
   if m == nil {
           return nil
   }  
@@ -179,7 +179,7 @@ go test -v ./examples/
 ```go
 g.P("func (h *", unexport(servName), "Handler) ", methName, "(ctx ", contextPkg, ".Context, in *", inType, ", out *",outType, ") error {")
 // 增加以下三行
-g.P("if err := in.validate();err != nil {")
+g.P("if err := in.Validate();err != nil {")
 g.P("return err")
 g.P("}")
 
@@ -190,7 +190,7 @@ g.P()
 就能使其生成的方法变为:
 ```go
 func (h *greeterHandler) Hello(ctx context.Context, in *Request, out *Response) error {
-    if err := in.validate();err != nil {
+    if err := in.Validate();err != nil {
         return err
     }
     return h.GreeterHandler.Hello(ctx, in, out)
@@ -198,10 +198,10 @@ func (h *greeterHandler) Hello(ctx context.Context, in *Request, out *Response) 
 ```
 同时在`protoc`中增加`--validate_out=.`,就能正确应用`protoc-gen-validate`
 
-2. 第二种是在server层手动执行`validate()`:
+2. 第二种是在server层手动执行`Validate()`:
 ```go
 func (g *Greeter) Hello(ctx context.Context, req *pb.Request, rsp *pb.Response) error {
-    if err := req.validate(); err != nil {
+    if err := req.Validate(); err != nil {
         return err
     }
     rsp.Greeting = "Hello " + req.Name

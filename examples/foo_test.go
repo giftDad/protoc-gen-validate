@@ -73,7 +73,7 @@ func TestNumerics(t *testing.T) {
 		err := mergo.Merge(req, *c.r, mergo.WithOverride)
 		assert.Nil(t, err)
 
-		err = req.validate()
+		err = req.Validate()
 		if c.equal {
 			if err != nil {
 				assert.NotEqual(t, c.errField, err.(NumericsReqValidationError).field, i+1)
@@ -180,7 +180,7 @@ func TestString(t *testing.T) {
 		err := mergo.Merge(req, *c.r, mergo.WithOverride)
 		assert.Nil(t, err)
 
-		err = req.validate()
+		err = req.Validate()
 		if c.equal {
 			if err != nil {
 				assert.NotEqual(t, c.errField, err.(StringsReqValidationError).field, i+1)
@@ -237,7 +237,7 @@ func TestRepeated(t *testing.T) {
 		err := mergo.Merge(req, *c.r, mergo.WithOverride) // repeated unable override
 		assert.Nil(t, err)
 
-		err = req.validate()
+		err = req.Validate()
 		if c.equal {
 			if err != nil {
 				assert.NotEqual(t, c.errField, err.(RepeatedReqValidationError).field, i+1)

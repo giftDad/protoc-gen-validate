@@ -1,7 +1,7 @@
 package templates
 
 const msgTpl = `
-func (m *{{ msgTyp . }}) validate() error {
+func (m *{{ msgTyp . }}) Validate() error {
 	if m == nil { return nil }
 	
 	{{ range .Fields }}

@@ -223,8 +223,8 @@ func messagefunc(field protogen.Field) (str string) {
 	}
 
 	str = `
-		if v, ok := interface{}(` + accessor(field) + `).(interface{ validate() error }); ok {
-			if err := v.validate(); err != nil {
+		if v, ok := interface{}(` + accessor(field) + `).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
 				return ` + field.Parent.GoIdent.GoName + `ValidationError {
 					field:  "` + field.GoName + `",
 					reason: "embedded message failed validation " + err.Error(),
@@ -236,8 +236,8 @@ func messagefunc(field protogen.Field) (str string) {
 	if field.Desc.IsList() {
 		str = `
 	for _, item := range ` + accessor(field) + ` {
-		if v, ok := interface{}(item).(interface{ validate() error }); ok {
-			if err := v.validate(); err != nil {
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
 				return ` + field.Parent.GoIdent.GoName + `ValidationError {
 					field:  "` + field.GoName + `",
 					reason: "embedded message failed validation " + err.Error(),

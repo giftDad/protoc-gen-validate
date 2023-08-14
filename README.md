@@ -88,7 +88,7 @@ message StringsReq {
 
 Created validation method for Numerics:
 ```go
-func (m *NumericsReq) validate() error {
+func (m *NumericsReq) Validate() error {
   if m == nil {
           return nil
   }  
@@ -181,7 +181,7 @@ Add the following lines at `cmd/protoc-gen-micro/plugin/micro/micro.go:480`:
 ```go
 g.P("func (h *", unexport(servName), "Handler) ", methName, "(ctx ", contextPkg, ".Context, in *", inType, ", out *",outType, ") error {")
 // Add the following three lines
-g.P("if err := in.validate();err != nil {")
+g.P("if err := in.Validate();err != nil {")
 g.P("return err")
 g.P("}")
 
@@ -192,7 +192,7 @@ g.P()
 This will transform the generated method into:
 ```go
 func (h *greeterHandler) Hello(ctx context.Context, in *Request, out *Response) error {
-    if err := in.validate();err != nil {
+    if err := in.Validate();err != nil {
         return err
     }
     return h.GreeterHandler.Hello(ctx, in, out)
@@ -200,10 +200,10 @@ func (h *greeterHandler) Hello(ctx context.Context, in *Request, out *Response) 
 ```
 Additionally, add `--validate_out=.` to your `protoc` command to apply `protoc-gen-validate`.
 
-2. The second approach is to manually call `validate()` in the server layer:
+2. The second approach is to manually call `Validate()` in the server layer:
 ```go
 func (g *Greeter) Hello(ctx context.Context, req *pb.Request, rsp *pb.Response) error {
-    if err := req.validate(); err != nil {
+    if err := req.Validate(); err != nil {
         return err
     }
     rsp.Greeting = "Hello " + req.Name
