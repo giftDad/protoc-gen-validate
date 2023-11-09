@@ -1,3 +1,5 @@
+![License](https://img.shields.io/github/license/bufbuild/protoc-gen-validate?color=blue)
+
 - [English](README.md)
 - [简体中文](README-zh.md)
 
