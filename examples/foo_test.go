@@ -248,3 +248,29 @@ func TestRepeated(t *testing.T) {
 		}
 	}
 }
+
+func TestRequired(t *testing.T) {
+	type _case struct {
+		r        *Required
+		equal    bool
+		errField string
+	}
+
+	_cases := []_case{
+		// test `@required:true` true
+		{r: &Required{A: &Foo{}}, equal: true, errField: "A"},
+		// test `@required:true` false
+		{r: &Required{A: nil}, equal: false, errField: "A"},
+	}
+
+	for i, c := range _cases {
+		err := c.r.Validate()
+		if c.equal {
+			if err != nil {
+				assert.NotEqual(t, c.errField, err.(RequiredValidationError).field, i+1)
+			}
+		} else {
+			assert.Equal(t, c.errField, err.(RequiredValidationError).field, i+1)
+		}
+	}
+}

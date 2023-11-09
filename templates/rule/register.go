@@ -45,6 +45,7 @@ const maxItemsTyp = "max_items"
 const uniqueTyp = "unique"
 const typeTyp = "type"
 const rangeTyp = "range"
+const requiredTyp = "required"
 
 var tienum = map[string]string{
 	eqTyp:          eqTpl,
@@ -67,6 +68,7 @@ var tienum = map[string]string{
 	uniqueTyp:      uniqueTpl,
 	typeTyp:        typeTpl,
 	rangeTyp:       rangeTpl,
+	requiredTyp:    requiredTpl,
 }
 
 // TemplateInfo 用以生成最终的 rule 模版

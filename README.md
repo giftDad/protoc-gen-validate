@@ -84,6 +84,16 @@ message StringsReq {
     // @type:ip
     string n = 14;
 }
+
+message Required {
+    // @required:true
+    Foo a = 1;
+}
+
+message Foo {
+    string a = 1;
+    string b = 2;
+}
 ```
 
 Created validation method for Numerics:
@@ -214,6 +224,21 @@ func (g *Greeter) Hello(ctx context.Context, req *pb.Request, rsp *pb.Response) 
 The advantage of the first approach is that it embeds validation in the program without requiring any business operations, but it introduces a certain level of intrusiveness. The second approach is more like a manual mode, where you call validation when needed.
 
 # Supported Rules
+
+## Struct Types
+
+### Required
+```protobuf
+message Required {
+    // @required:true
+    Foo a = 1;
+}
+
+message Foo {
+    string a = 1;
+    string b = 2;
+}
+```
 
 ## Numeric Types
 (float, double, int32, int64, uint32, uint64 , sint32, sint64, fixed32, fixed64, sfixed32, sfixed64)

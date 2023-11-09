@@ -73,3 +73,13 @@ message StringsReq {
     // @type:ip
     string n = 14;
 }
+
+message Required {
+    // @required:true
+    Foo a = 1;
+}
+
+message Foo {
+    string a = 1;
+    string b = 2;
+}

@@ -81,6 +81,16 @@ message StringsReq {
     // @type:ip
     string n = 14;
 }
+
+message Required {
+    // @required:true
+    Foo a = 1;
+}
+
+message Foo {
+    string a = 1;
+    string b = 2;
+}
 ```
 
 生成的`Numerics`的校验方法如下：
@@ -213,6 +223,21 @@ func (g *Greeter) Hello(ctx context.Context, req *pb.Request, rsp *pb.Response) 
 而第二种则就像手动挡，在需要的时候手动调用。
 
 # 支持规则
+
+## 复合类型
+
+### 必要
+```protobuf
+message Required {
+    // @required:true
+    Foo a = 1;
+}
+
+message Foo {
+    string a = 1;
+    string b = 2;
+}
+```
 
 ## 数字类型
 (float, double, int32, int64, uint32, uint64 , sint32, sint64, fixed32, fixed64, sfixed32, sfixed64)
