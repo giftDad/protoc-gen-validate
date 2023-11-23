@@ -6,7 +6,7 @@
 # protoc-gen-validate
 基于proto文件的注解，为每个message生成validate函数。
 
-[文章](https://yflee.in/protoc-gen-validate.html)描述了protoc-gen-validate的前世今生，也欢迎大家加我的微信`lyf987667482`一起讨论。
+[文章](https://yflee.in/tech/protoc-gen-validate.html)描述了protoc-gen-validate的前世今生，也欢迎大家加我的微信`lyf987667482`一起讨论。
 ```protobuf
 syntax = "proto3";
 

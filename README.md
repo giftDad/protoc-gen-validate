@@ -7,7 +7,7 @@
 
 based on proto files' annotation, generating a validate function for each message.
 
-[Article](https://yflee.in/protoc-gen-validate.html) describes the past and present of protoc-gen-validate, and I welcome everyone to add my WeChat `lyf987667482` to discuss together.
+[Article](https://yflee.in/tech/protoc-gen-validate.html) describes the past and present of protoc-gen-validate, and I welcome everyone to add my WeChat `lyf987667482` to discuss together.
 
 ```protobuf
 syntax = "proto3";
